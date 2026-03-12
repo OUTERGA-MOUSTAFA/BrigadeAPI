@@ -7,15 +7,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => 'required|string|email|unique:users,email|max:255',
+            'password' => ['required','min:8','string', 'confirmed', Password::defaults()],
         ]);
 
         $isFirstUser = User::count() === 0;
@@ -44,12 +45,12 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'values incorrect'], 401);
         }
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Credentials incorrects'], 401);
+            return response()->json(['message' => 'Token incorrects'], 401);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -70,4 +71,8 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
     
+    function user(Request $request)
+    {
+        return response()->json($request->user());
+    }   
 }
