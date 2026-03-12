@@ -18,6 +18,7 @@ class CategorieController extends Controller
                 'message' => 'Forbidden: Only admins can create categories'
             ], 403);
         }
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
