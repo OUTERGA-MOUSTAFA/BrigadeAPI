@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Categorie;
 use App\Models\Plat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -60,7 +59,7 @@ class PlatsController extends Controller
 
         return response()->json([
             'data' => $plats
-        ], 201);
+        ], 200);
     }
 
     public function index()

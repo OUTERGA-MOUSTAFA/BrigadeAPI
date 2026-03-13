@@ -18,7 +18,7 @@ class CategorieController extends Controller
                 'message' => 'Forbidden: Only admins can create categories'
             ], 403);
         }
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -38,20 +38,20 @@ class CategorieController extends Controller
         $categories = Categorie::get();
         return response()->json([
             'categories' => $categories,
-        ]);
+        ],200);
         return;
     }
 
-     public function show($id)
+    public function show($id)
     {
         // $categorie = Categorie::findOrFail($id); //Model NotFoundException
         $categorie = Categorie::find($id);
-        if(!$categorie){
+        if (!$categorie) {
             return response()->json(['message' => 'Category not found'], 404);
         }
         return response()->json([
             'categories' => $categorie,
-        ]);
+        ],200);
         return;
     }
 
@@ -75,6 +75,16 @@ class CategorieController extends Controller
     {
         Categorie::destroy($id);
 
-        return response()->json(['message' => 'deleted']);
+        return response()->json(['message' => 'deleted'], 200);
+    }
+
+    function CategoriePlats($id)
+    {
+        $categorie = Categorie::with('plats')->findOrFail($id);
+
+        return response()->json([
+            'message' => 'Here is your plats of category: ' . $categorie->name,
+            'data' => $categorie->plats
+        ], 200);
     }
 }
