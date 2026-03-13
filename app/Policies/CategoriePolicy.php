@@ -27,20 +27,24 @@ class CategoriePolicy
     /**
      * Determine whether the user can create models.
      */
-//    public function create(User $user)
-//     {
-//         return $user->role === 'admin';
-//     }
+    public function create(User $user):Response
+    {
+        return $user->role === 'admin'? Response::allow()
+        : Response::deny('you are not Admin of resterant to create category!');
+        
+    }
 
-//     public function update(User $user)
-//     {
-//         return $user->role === 'admin';
-//     }
+    public function update(User $user)
+    {
+        return $user->role === 'admin'? Response::allow()
+        : Response::deny('you are not Admin of resterant to update category!');
+    }
 
-//     public function delete(User $user)
-//     {
-//         return $user->role === 'admin';
-//     }
+    public function delete(User $user)
+    {
+        return $user->role === 'admin'? Response::allow()
+        : Response::deny('you are not Admin of resterant to delete category!');
+    }
 
     /**
      * Determine whether the user can restore the model.

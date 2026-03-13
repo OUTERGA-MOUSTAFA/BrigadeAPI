@@ -12,12 +12,12 @@ class CategorieController extends Controller
 
     public function store(Request $request)
     {
-        // $this->authorize('create', Categorie::class);
-        if (auth()->user()->role !== 'admin') {
-            return response()->json([
-                'message' => 'Forbidden: Only admins can create categories'
-            ], 403);
-        }
+        $this->authorize('create', Categorie::class);
+        // if (auth()->user()->role !== 'admin') {
+        //     return response()->json([
+        //         'message' => 'Forbidden: Only admins can create categories'
+        //     ], 403);
+        // }
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -57,11 +57,12 @@ class CategorieController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (auth()->user()->role !== 'admin') {
-            return response()->json([
-                'message' => 'Forbidden: Only admins can Update categories'
-            ], 403);
-        }
+        $this->authorize('update', Categorie::class);
+        // if (auth()->user()->role !== 'admin') {
+        //     return response()->json([
+        //         'message' => 'Forbidden: Only admins can Update categories'
+        //     ], 403);
+        // }
         $categorie = Categorie::findOrFail($id);
         $categorie->update($request->all());
 
@@ -73,6 +74,7 @@ class CategorieController extends Controller
 
     public function destroy($id)
     {
+        $this->authorize('delete', Categorie::class);
         Categorie::destroy($id);
 
         return response()->json(['message' => 'deleted'], 200);

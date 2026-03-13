@@ -11,12 +11,12 @@ class PlatsController extends Controller
 {
     public function store(Request $request)
     {
-        // $this->authorize('create', Plat::class);
-        if (auth()->user()->role !== 'admin') {
-            return response()->json([
-                'message' => 'Forbidden: Only admins can create categories'
-            ], 403);
-        }
+        $this->authorize('create', Plat::class);
+        // if (auth()->user()->role !== 'admin') {
+        //     return response()->json([
+        //         'message' => 'Forbidden: Only admins can create categories'
+        //     ], 403);
+        // }
 
         $validate = $request->validate([
             'title' => 'required|string|max:40',
@@ -91,11 +91,12 @@ class PlatsController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (auth()->user()->role !== 'admin') {
-            return response()->json([
-                'message' => 'Forbidden: Only admins can update plats'
-            ], 403);
-        }
+        $this->authorize('update', Plat::class);
+        // if (auth()->user()->role !== 'admin') {
+        //     return response()->json([
+        //         'message' => 'Forbidden: Only admins can update plats'
+        //     ], 403);
+        // }
 
         $plat = Plat::findOrFail($id);
 
@@ -128,11 +129,12 @@ class PlatsController extends Controller
 
     function destroy($id)
     {
-        if (auth()->user()->role !== 'admin') {
-            return response()->json([
-                'message' => 'Forbidden: Only admins can delete plats'
-            ], 403);
-        }
+        $this->authorize('delete', Plat::class);
+        // if (auth()->user()->role !== 'admin') {
+        //     return response()->json([
+        //         'message' => 'Forbidden: Only admins can delete plats'
+        //     ], 403);
+        // }
 
         $plat = Plat::findOrFail($id);
         if ($plat->image) {
